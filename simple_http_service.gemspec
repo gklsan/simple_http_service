@@ -1,27 +1,27 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "simple_http/version"
+require "simple_http_service/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "simple_http"
-  spec.version       = SimpleHttp::VERSION
+  spec.name          = "simple_http_service"
+  spec.version       = SimpleHttpService::VERSION
   spec.authors       = ["Gokul"]
   spec.email         = ["pgokulmca@gmail.com"]
 
-  spec.summary       = %q{Welcome to SimpleHttp gem}
-  spec.description   = '%q{Welcome to SimpleHttp gem}'
-  spec.homepage      = "https://github.com/gklsan/simple_http_client"
+  spec.summary       = 'Welcome to SimpleHttpService gem'
+  spec.description   = 'Welcome to SimpleHttpService gem'
+  spec.homepage      = "https://github.com/gklsan/simple_http_service"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    # spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/gklsan/simple_http_client"
-    spec.metadata["changelog_uri"] = "https://github.com/gklsan/simple_http_client"
+    spec.metadata["source_code_uri"] = "https://github.com/gklsan/simple_http_service"
+    spec.metadata["changelog_uri"] = "https://github.com/gklsan/simple_http_service"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."

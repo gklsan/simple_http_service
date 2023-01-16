@@ -1,5 +1,5 @@
 require 'net/http'
-module SimpleHttp
+module SimpleHttpService
   class Client
     attr_accessor :uri, :headers, :http_method, :query
 
