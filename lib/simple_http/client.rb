@@ -1,3 +1,4 @@
+require 'net/http'
 module SimpleHttp
   class Client
     attr_accessor :uri, :headers, :http_method, :query
@@ -8,7 +9,7 @@ module SimpleHttp
 
       @uri = URI(opts[:url])
       @http_method = opts[:http_method]
-      @headers = opts[:headers]
+      @headers = opts[:headers] || {}
       @query = opts[:query]
     end
 
