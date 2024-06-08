@@ -73,8 +73,9 @@ RSpec.describe SimpleHttpService::Client do
       subject.send(:set_headers)
 
       expect(request['Accept']).to eq(headers[:accept])
-      expect(request['Authorization']).to eq(headers[:Authorization])
+      expect(request['Authorization']).to eq(headers[:authorization])
       expect(request['Content-Type']).to eq(headers[:content_type])
+      expect(request['Cookie']).to eq(headers[:cookie])
     end
   end
 

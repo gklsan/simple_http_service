@@ -1,40 +1,122 @@
 # SimpleHttpService
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/simple_http`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+SimpleHttpService is a simple Ruby library to make HTTP requests with customizable options for headers, timeouts, and retries. It provides a convenient way to create and send HTTP requests using a clean and simple interface.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-```ruby
-gem 'simple_http_service'
-```
+    gem 'simple_http_service'
 
 And then execute:
 
-    $ bundle
+    bundle install
 
 Or install it yourself as:
 
-    $ gem install simple_http_service
+    gem install simple_http_service
 
 ## Usage
 
+### Creating a Client
+You can create a new HTTP client using the SimpleHttpService.new method, which initializes an instance of SimpleHttpService::Client.
+
+```ruby
+require 'simple_http_service'
+
+client = SimpleHttpService.new(
+  url: 'https://api.example.com/endpoint',
+  http_method: :get,
+  headers: {
+    accept: 'application/json',
+    authorization: 'Bearer your_token',
+    content_type: 'application/json',
+    cookie: 'your cookie'
+  },
+  open_timeout: 5,
+  read_timeout: 10,
+  write_timeout: 5,
+  retry_count: 3
+)
+```
+### Making a Request
+After creating the client, you can call the call method to make the HTTP request:
+```ruby
+response = client.call
+puts response.body
 ```
 
+### Options
+- `url` (required): The URL for the HTTP request.
+- `http_method` (required): The HTTP method to use (:get, :post, :put).
+- `headers`: A hash of headers to include in the request.
+- `open_timeout`: Timeout for opening the connection (default is false).
+- `read_timeout`: Timeout for reading the response (default is false).
+- `write_timeout`: Timeout for writing the request (default is false).
+- `retry_count`: The number of times to retry the request in case of failure.
+- `request_body`: The body of the request (used for POST and PUT requests).
+
+### Example
+Here's a complete example of using `SimpleHttpService` to make a `GET` request:
+
+```ruby
+require 'simple_http_service'
+
+client = SimpleHttpService.new(
+  url: 'https://api.example.com/endpoint',
+  http_method: :get,
+  headers: {
+    accept: 'application/json',
+    authorization: 'Bearer your_token'
+  },
+  open_timeout: 5,
+  read_timeout: 10
+)
+
+response = client.call
+puts response.body
 ```
+For a POST request with a request body:
+```ruby
+require 'simple_http_service'
+
+client = SimpleHttpService.new(
+  url: 'https://api.example.com/endpoint',
+  http_method: :post,
+  headers: {
+    accept: 'application/json',
+    authorization: 'Bearer your_token',
+    content_type: 'application/json'
+  },
+  request_body: { key: 'value' }.to_json,
+  open_timeout: 5,
+  read_timeout: 10,
+  write_timeout: 5
+)
+
+response = client.call
+puts response.body
+```
+
+### Error Handling
+The library defines a custom error class SimpleHttpService::Error that you can use to handle exceptions:
+```ruby
+begin
+  response = client.call
+  puts response.body
+rescue SimpleHttpService::Error => e
+  puts "An error occurred: #{e.message}"
+end
+```
+
 
 ## Development
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle install`. To release a new version, update the version number in `version.rb`.
 
 ## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/simple_http. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/gklsan/simple_http_service.
 
 ## License
 
@@ -42,4 +124,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the SimpleHttp project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/simple_http/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the SimpleHttpService project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the code of conduct.

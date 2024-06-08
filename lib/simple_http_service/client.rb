@@ -29,7 +29,7 @@ module SimpleHttpService
 
     def set_headers
       request["Accept"] = headers[:accept] if headers[:accept]
-      request["Authorization"] = headers[:Authorization] if headers[:Authorization]
+      request["Authorization"] = headers[:authorization] if headers[:authorization]
       request["Content-Type"] = headers[:content_type] if headers[:content_type]
       request["Cookie"] = headers[:cookie] if headers[:cookie]
     end
