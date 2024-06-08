@@ -1,7 +1,8 @@
 require 'net/http'
 module SimpleHttpService
   class Client
-    attr_accessor :uri, :headers, :http_method, :query
+    attr_accessor :uri, :headers, :http_method, :open_timeout, :read_timeout, :write_timeout,
+                  :retry_count, :request_body
 
     def initialize(opts)
       raise 'URL must be present' unless opts[:url]
@@ -10,12 +11,17 @@ module SimpleHttpService
       @uri = URI(opts[:url])
       @http_method = opts[:http_method]
       @headers = opts[:headers] || {}
-      @query = opts[:query]
+      @request_body = opts[:request_body]
+      @open_timeout = opts[:open_timeout] || false
+      @read_timeout = opts[:read_timeout] || false
+      @write_timeout = opts[:write_timeout] || false
+      @retry_count = opts[:retry_count]
     end
 
     def call
       enable_ssl
       set_headers
+      set_timeout
       http.request(request)
     end
 
@@ -29,7 +35,14 @@ module SimpleHttpService
     end
 
     def request
-      @request ||= (http_method == :post ? Net::HTTP::Post.new(uri) : Net::HTTP::Get.new(uri))
+      @request ||= case http_method
+                   when :post
+                     Net::HTTP::Post.new(uri)
+                   when :put
+                     Net::HTTP::Put.new(uri)
+                   else
+                     Net::HTTP::Get.new(uri)
+                   end
     end
 
     def enable_ssl
@@ -37,6 +50,16 @@ module SimpleHttpService
 
       http.use_ssl = true
       http.ssl_version = :TLSv1_2
+    end
+
+    def set_timeout
+      http.open_timeout = open_timeout if open_timeout
+      http.read_timeout = read_timeout if read_timeout
+      http.write_timeout = write_timeout if write_timeout
+    end
+
+    def set_request_params
+      request.body = request_body if request_body.present?
     end
 
     def http

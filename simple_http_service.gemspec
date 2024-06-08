@@ -6,9 +6,8 @@ require "simple_http_service/version"
 Gem::Specification.new do |spec|
   spec.name          = "simple_http_service"
   spec.version       = SimpleHttpService::VERSION
-  spec.authors       = ["Gokul"]
+  spec.authors       = ["Gokul (gklsan)"]
   spec.email         = ["pgokulmca@gmail.com"]
-
   spec.summary       = 'Welcome to SimpleHttpService gem'
   spec.description   = 'Welcome to SimpleHttpService gem'
   spec.homepage      = "https://github.com/gklsan/simple_http_service"
@@ -36,8 +35,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "net-http", "~> 0.3.2"
-  spec.add_development_dependency "bundler", "~> 1.17"
+  spec.add_dependency "net-http", "~> 0.4.1"
+  spec.add_development_dependency "bundler", "~> 2.5.10"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
 end
