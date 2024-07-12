@@ -1,4 +1,4 @@
-# SimpleHttpService
+# SimpleHttpService [![Gem Version](https://badge.fury.io/rb/simple_http_service.svg)](https://badge.fury.io/rb/simple_http_service)
 
 SimpleHttpService is a simple Ruby library to make HTTP requests with customizable options for headers, timeouts, and retries. It provides a convenient way to create and send HTTP requests using a clean and simple interface.
 
@@ -36,7 +36,7 @@ client = SimpleHttpService.new(
   open_timeout: 5,
   read_timeout: 10,
   write_timeout: 5,
-  retry_count: 3
+  max_retries: 3
 )
 ```
 ### Making a Request
@@ -53,7 +53,7 @@ puts response.body
 - `open_timeout`: Timeout for opening the connection (default is false).
 - `read_timeout`: Timeout for reading the response (default is false).
 - `write_timeout`: Timeout for writing the request (default is false).
-- `retry_count`: The number of times to retry the request in case of failure.
+- `max_retries`: The number of times to retry the request in case of failure.
 - `request_body`: The body of the request (used for POST and PUT requests).
 
 ### Example

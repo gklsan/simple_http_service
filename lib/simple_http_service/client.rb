@@ -2,7 +2,7 @@ require 'net/http'
 module SimpleHttpService
   class Client
     attr_accessor :uri, :headers, :http_method, :open_timeout, :read_timeout, :write_timeout,
-                  :retry_count, :request_body
+                  :max_retries, :request_body
 
     def initialize(opts)
       raise 'URL must be present' unless opts[:url]
@@ -15,7 +15,7 @@ module SimpleHttpService
       @open_timeout = opts[:open_timeout] || false
       @read_timeout = opts[:read_timeout] || false
       @write_timeout = opts[:write_timeout] || false
-      @retry_count = opts[:retry_count]
+      @max_retries = opts[:max_retries] || 1
     end
 
     def call
@@ -56,6 +56,7 @@ module SimpleHttpService
       http.open_timeout = open_timeout if open_timeout
       http.read_timeout = read_timeout if read_timeout
       http.write_timeout = write_timeout if write_timeout
+      http.max_retries = max_retries if max_retries
     end
 
     def set_request_params
