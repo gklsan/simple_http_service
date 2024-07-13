@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = SimpleHttpService::VERSION
   spec.authors       = ["Gokul (gklsan)"]
   spec.email         = ["pgokulmca@gmail.com"]
-  spec.summary       = 'Welcome to SimpleHttpService gem'
+  spec.summary       = 'SimpleHttpService is a simple Ruby library to make HTTP requests with customizable options for headers, timeouts, and retries. It provides a convenient way to create and send HTTP requests using a clean and simple interface.'
   spec.description   = 'Welcome to SimpleHttpService gem'
   spec.homepage      = "https://github.com/gklsan/simple_http_service"
   spec.license       = "MIT"
