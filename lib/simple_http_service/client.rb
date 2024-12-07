@@ -2,7 +2,7 @@ require 'net/http'
 module SimpleHttpService
   class Client
     attr_accessor :uri, :headers, :http_method, :open_timeout, :read_timeout, :write_timeout,
-                  :max_retries, :request_body
+                  :max_retries, :request_body, :additional_headers
 
     def initialize(opts)
       raise 'URL must be present' unless opts[:url]
@@ -16,6 +16,7 @@ module SimpleHttpService
       @read_timeout = opts[:read_timeout] || false
       @write_timeout = opts[:write_timeout] || false
       @max_retries = opts[:max_retries] || 1
+      @additional_headers = opts[:additional_headers] || {}
     end
 
     def call
@@ -32,6 +33,7 @@ module SimpleHttpService
       request["Authorization"] = headers[:authorization] if headers[:authorization]
       request["Content-Type"] = headers[:content_type] if headers[:content_type]
       request["Cookie"] = headers[:cookie] if headers[:cookie]
+      additional_headers.each {|key, value|  request[key] = value } if additional_headers
     end
 
     def request
