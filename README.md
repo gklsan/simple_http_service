@@ -36,7 +36,10 @@ client = SimpleHttpService.new(
   open_timeout: 5,
   read_timeout: 10,
   write_timeout: 5,
-  max_retries: 3
+  max_retries: 3,
+  additional_headers: {
+    'X-Request-Id': '12345'
+  }
 )
 ```
 ### Making a Request
@@ -55,6 +58,7 @@ puts response.body
 - `write_timeout`: Timeout for writing the request (default is false).
 - `max_retries`: The number of times to retry the request in case of failure.
 - `request_body`: The body of the request (used for POST and PUT requests).
+- `additional_headers`: Additional headers to include in the request.
 
 ### Example
 Here's a complete example of using `SimpleHttpService` to make a `GET` request:
