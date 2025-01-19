@@ -9,4 +9,5 @@ gemspec
 group :development, :test do
   gem 'rspec', '~> 3.13.0'
   gem 'rspec-core', '~> 3.13.1'
+  gem 'yard'
 end

@@ -25,6 +25,7 @@ GEM
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
     uri (0.12.1)
+    yard (0.9.37)
 
 PLATFORMS
   ruby
@@ -35,6 +36,7 @@ DEPENDENCIES
   rspec (~> 3.13.0)
   rspec-core (~> 3.13.1)
   simple_http_service!
+  yard
 
 BUNDLED WITH
    2.5.11
