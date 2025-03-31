@@ -1,4 +1,10 @@
-# SimpleHttpService [![Gem Version](https://badge.fury.io/rb/simple_http_service.svg)](https://badge.fury.io/rb/simple_http_service)
+# SimpleHttpService 
+
+[![Gem Version](https://badge.fury.io/rb/simple_http_service.svg?icon=si%3Arubygems)](https://badge.fury.io/rb/simple_http_service)
+[![Downloads](https://img.shields.io/gem/dt/simple_http_service.svg)](https://badge.fury.io/rb/simple_http_service)
+[![Github forks](https://img.shields.io/github/forks/gklsan/simple_http_service.svg)](https://github.com/gklsan/simple_http_service/network)
+[![Github stars](https://img.shields.io/github/stars/gklsan/simple_http_service.svg)](https://github.com/gklsan/simple_http_service/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 SimpleHttpService is a simple Ruby library to make HTTP requests with customizable options for headers, timeouts, and retries. It provides a convenient way to create and send HTTP requests using a clean and simple interface.
 
