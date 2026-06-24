@@ -468,9 +468,9 @@
   <span class='ivar'>@http_method</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:http_method</span><span class='rbracket'>]</span>
   <span class='ivar'>@headers</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:headers</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
   <span class='ivar'>@request_body</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:request_body</span><span class='rbracket'>]</span>
-  <span class='ivar'>@open_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:open_timeout</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>false</span>
-  <span class='ivar'>@read_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:read_timeout</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>false</span>
-  <span class='ivar'>@write_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:write_timeout</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='kw'>false</span>
+  <span class='ivar'>@open_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:open_timeout</span><span class='rbracket'>]</span>
+  <span class='ivar'>@read_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:read_timeout</span><span class='rbracket'>]</span>
+  <span class='ivar'>@write_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:write_timeout</span><span class='rbracket'>]</span>
   <span class='ivar'>@max_retries</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:max_retries</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='int'>1</span>
   <span class='ivar'>@additional_headers</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='lbracket'>[</span><span class='symbol'>:additional_headers</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
@@ -898,7 +898,8 @@
 24
 25
 26
-27</pre>
+27
+28</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/simple_http_service/client.rb', line 22</span>
@@ -907,6 +908,7 @@
   <span class='id identifier rubyid_enable_ssl'>enable_ssl</span>
   <span class='id identifier rubyid_set_headers'>set_headers</span>
   <span class='id identifier rubyid_set_timeout'>set_timeout</span>
+  <span class='id identifier rubyid_set_request_params'>set_request_params</span>
   <span class='id identifier rubyid_http'>http</span><span class='period'>.</span><span class='id identifier rubyid_request'>request</span><span class='lparen'>(</span><span class='id identifier rubyid_request'>request</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -919,9 +921,9 @@
 </div>
 
       <div id="footer">
-  Generated on Sun Jan 19 17:15:39 2025 by
+  Generated on Wed Jun 24 13:55:17 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.37 (ruby-3.2.2).
+  0.9.37 (ruby-3.4.2).
 </div>
 
     </div>
