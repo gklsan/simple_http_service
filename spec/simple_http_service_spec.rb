@@ -5,7 +5,7 @@ require 'simple_http_service'
 
 RSpec.describe SimpleHttpService::Client do
   let(:url) { 'http://example.com' }
-  let(:headers) { { accept: 'application/json', Authorization: 'Bearer token', content_type: 'application/json' } }
+  let(:headers) { { accept: 'application/json', authorization: 'Bearer token', content_type: 'application/json' } }
   let(:http_method) { :get }
   let(:open_timeout) { 10 }
   let(:read_timeout) { 10 }
@@ -97,11 +97,10 @@ RSpec.describe SimpleHttpService::Client do
     context 'when the uri scheme is https' do
       let(:url) { 'https://example.com' }
 
-      it 'enables SSL and sets the SSL version' do
+      it 'enables SSL' do
         subject.send(:enable_ssl)
 
         expect(http.use_ssl?).to be true
-        expect(http.ssl_version).to eq(:TLSv1_2)
       end
     end
 

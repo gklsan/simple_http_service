@@ -12,9 +12,9 @@ module SimpleHttpService
       @http_method = opts[:http_method]
       @headers = opts[:headers] || {}
       @request_body = opts[:request_body]
-      @open_timeout = opts[:open_timeout] || false
-      @read_timeout = opts[:read_timeout] || false
-      @write_timeout = opts[:write_timeout] || false
+      @open_timeout = opts[:open_timeout]
+      @read_timeout = opts[:read_timeout]
+      @write_timeout = opts[:write_timeout]
       @max_retries = opts[:max_retries] || 1
       @additional_headers = opts[:additional_headers] || {}
     end
@@ -23,6 +23,7 @@ module SimpleHttpService
       enable_ssl
       set_headers
       set_timeout
+      set_request_params
       http.request(request)
     end
 
@@ -38,12 +39,11 @@ module SimpleHttpService
 
     def request
       @request ||= case http_method
-                   when :post
-                     Net::HTTP::Post.new(uri)
-                   when :put
-                     Net::HTTP::Put.new(uri)
-                   else
-                     Net::HTTP::Get.new(uri)
+                   when :post    then Net::HTTP::Post.new(uri)
+                   when :put     then Net::HTTP::Put.new(uri)
+                   when :patch   then Net::HTTP::Patch.new(uri)
+                   when :delete  then Net::HTTP::Delete.new(uri)
+                   else               Net::HTTP::Get.new(uri)
                    end
     end
 
@@ -51,7 +51,6 @@ module SimpleHttpService
       return unless uri.scheme == 'https'
 
       http.use_ssl = true
-      http.ssl_version = :TLSv1_2
     end
 
     def set_timeout
@@ -62,7 +61,7 @@ module SimpleHttpService
     end
 
     def set_request_params
-      request.body = request_body if request_body.present?
+      request.body = request_body if request_body
     end
 
     def http
