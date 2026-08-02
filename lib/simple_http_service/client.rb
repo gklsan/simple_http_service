@@ -1,8 +1,10 @@
 require 'net/http'
+require 'simple_http_service/rate_limiter'
+
 module SimpleHttpService
   class Client
     attr_accessor :uri, :headers, :http_method, :open_timeout, :read_timeout, :write_timeout,
-                  :max_retries, :request_body, :additional_headers
+                  :max_retries, :request_body, :additional_headers, :rate_limit
 
     def initialize(opts)
       raise 'URL must be present' unless opts[:url]
@@ -17,9 +19,11 @@ module SimpleHttpService
       @write_timeout = opts[:write_timeout]
       @max_retries = opts[:max_retries] || 1
       @additional_headers = opts[:additional_headers] || {}
+      @rate_limit = opts[:rate_limit] || {}
     end
 
     def call
+      throttle
       enable_ssl
       set_headers
       set_timeout
@@ -27,7 +31,22 @@ module SimpleHttpService
       http.request(request)
     end
 
+    # Limiter backing this client, or nil unless rate_limit[:limit] was passed in.
+    def rate_limiter
+      return unless rate_limit[:limit]
+
+      @rate_limiter ||= RateLimiter.for(
+        rate_limit[:key] || "#{uri.scheme}://#{uri.host}:#{uri.port}",
+        limit: rate_limit[:limit],
+        interval: rate_limit[:interval] || RateLimiter::DEFAULT_INTERVAL
+      )
+    end
+
     private
+
+    def throttle
+      rate_limiter&.acquire(wait: rate_limit[:wait] || false)
+    end
 
     def set_headers
       request["Accept"] = headers[:accept] if headers[:accept]
