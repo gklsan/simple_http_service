@@ -15,14 +15,13 @@ module SimpleHttpService
   # Sliding-window rate limiter, shared per key across all Client instances
   # in the process. Thread safe.
   class RateLimiter
-    DEFAULT_LIMIT = 2
     DEFAULT_INTERVAL = 60
 
     attr_reader :limit, :interval
 
     class << self
       # Returns the limiter registered for +key+, creating it on first use.
-      def for(key, limit: DEFAULT_LIMIT, interval: DEFAULT_INTERVAL)
+      def for(key, limit:, interval: DEFAULT_INTERVAL)
         registry_mutex.synchronize do
           registry[key] ||= new(limit: limit, interval: interval)
         end
@@ -44,7 +43,7 @@ module SimpleHttpService
       end
     end
 
-    def initialize(limit: DEFAULT_LIMIT, interval: DEFAULT_INTERVAL)
+    def initialize(limit:, interval: DEFAULT_INTERVAL)
       raise 'rate limit must be a positive integer' unless limit.to_i.positive?
       raise 'rate limit interval must be positive' unless interval.to_f.positive?
 

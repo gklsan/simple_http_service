@@ -50,26 +50,27 @@ RSpec.describe SimpleHttpService::RateLimiter do
   end
 
   describe '#initialize' do
+    it 'requires a limit' do
+      expect { described_class.new }.to raise_error(ArgumentError, /limit/)
+    end
+
     it 'rejects a non positive limit' do
       expect { described_class.new(limit: 0) }.to raise_error('rate limit must be a positive integer')
     end
 
     it 'rejects a non positive interval' do
-      expect { described_class.new(interval: 0) }.to raise_error('rate limit interval must be positive')
+      expect { described_class.new(limit: 2, interval: 0) }.to raise_error('rate limit interval must be positive')
+    end
+
+    it 'defaults the interval to 60 seconds' do
+      expect(described_class.new(limit: 2).interval).to eq(60)
     end
   end
 
   describe '.for' do
     it 'shares one limiter per key' do
-      expect(described_class.for('a')).to equal(described_class.for('a'))
-      expect(described_class.for('a')).not_to equal(described_class.for('b'))
-    end
-
-    it 'defaults to 2 requests per 60 seconds' do
-      limiter = described_class.for('a')
-
-      expect(limiter.limit).to eq(2)
-      expect(limiter.interval).to eq(60)
+      expect(described_class.for('a', limit: 2)).to equal(described_class.for('a', limit: 2))
+      expect(described_class.for('a', limit: 2)).not_to equal(described_class.for('b', limit: 2))
     end
   end
 end

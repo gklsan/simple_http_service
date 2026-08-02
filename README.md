@@ -45,6 +45,10 @@ client = SimpleHttpService.new(
   max_retries: 3,
   additional_headers: {
     'X-Request-Id': '12345'
+  },
+  rate_limit: {
+    limit: 2,
+    interval: 60
   }
 )
 ```
@@ -65,6 +69,50 @@ puts response.body
 - `max_retries`: The number of times to retry the request in case of failure.
 - `request_body`: The body of the request (used for POST and PUT requests).
 - `additional_headers`: Additional headers to include in the request.
+- `rate_limit`: A hash enabling client side throttling. Omit it and no limiting is applied.
+  - `limit` (required to enable): Maximum number of requests allowed per window.
+  - `interval`: Length of the window in seconds (default is `60`).
+  - `wait`: When `true`, `call` sleeps until a slot frees up instead of raising (default is `false`).
+  - `key`: Bucket the window under a custom key (default is `scheme://host:port`).
+
+### Rate Limiting
+Rate limiting is opt in. Pass a `rate_limit` hash to cap how often the client fires requests:
+
+```ruby
+client = SimpleHttpService.new(
+  url: 'https://api.example.com/endpoint',
+  http_method: :get,
+  rate_limit: { limit: 2, interval: 60 }
+)
+
+2.times { client.call }
+client.call # raises SimpleHttpService::RateLimitExceeded
+```
+
+The window is a sliding one, shared across every client in the process that resolves to the same
+key, so two clients pointing at the same host draw from the same budget. Use `key` to share (or
+separate) buckets explicitly.
+
+To block instead of raising when the budget is used up:
+
+```ruby
+client = SimpleHttpService.new(
+  url: 'https://api.example.com/endpoint',
+  http_method: :get,
+  rate_limit: { limit: 2, interval: 60, wait: true }
+)
+```
+
+`SimpleHttpService::RateLimitExceeded` inherits from `SimpleHttpService::Error` and exposes
+`retry_after`, the number of seconds until the next slot opens:
+
+```ruby
+begin
+  client.call
+rescue SimpleHttpService::RateLimitExceeded => e
+  puts "Throttled, retry in #{e.retry_after.ceil}s"
+end
+```
 
 ### Example
 Here's a complete example of using `SimpleHttpService` to make a `GET` request:
