@@ -28,6 +28,8 @@ RSpec.describe SimpleHttpService::Client do
 
   subject { described_class.new(opts) }
 
+  before { SimpleHttpService::RateLimiter.reset! }
+
   describe '#initialize' do
     context 'with valid options' do
       it 'initializes with the correct attributes' do
@@ -62,6 +64,74 @@ RSpec.describe SimpleHttpService::Client do
       allow(subject).to receive(:http).and_return(double(request: true))
 
       expect(subject.call).to be true
+    end
+  end
+
+  describe 'rate limiting' do
+    let(:stubbed_http) { double(request: true) }
+
+    before do
+      allow(subject).to receive(:enable_ssl)
+      allow(subject).to receive(:set_headers)
+      allow(subject).to receive(:set_timeout)
+      allow(subject).to receive(:http).and_return(stubbed_http)
+    end
+
+    it 'is disabled unless a rate_limit is passed' do
+      expect(subject.rate_limit).to eq({})
+      expect(subject.rate_limiter).to be_nil
+      expect { 10.times { subject.call } }.not_to raise_error
+    end
+
+    context 'with a rate_limit of 2 per minute' do
+      let(:opts) { super().merge(rate_limit: { limit: 2, interval: 60 }) }
+
+      it 'allows requests up to the limit' do
+        expect { 2.times { subject.call } }.not_to raise_error
+      end
+
+      it 'raises once the limit is exceeded' do
+        2.times { subject.call }
+
+        expect { subject.call }.to raise_error(SimpleHttpService::RateLimitExceeded)
+      end
+
+      it 'shares the window across clients hitting the same host' do
+        other = described_class.new(opts)
+        allow(other).to receive(:enable_ssl)
+        allow(other).to receive(:set_headers)
+        allow(other).to receive(:set_timeout)
+        allow(other).to receive(:http).and_return(stubbed_http)
+
+        2.times { subject.call }
+
+        expect { other.call }.to raise_error(SimpleHttpService::RateLimitExceeded)
+      end
+    end
+
+    context 'with only a limit given' do
+      let(:opts) { super().merge(rate_limit: { limit: 5 }) }
+
+      it 'defaults the interval to 60 seconds' do
+        expect(subject.rate_limiter.interval).to eq(60)
+        expect(subject.rate_limiter.limit).to eq(5)
+      end
+    end
+
+    context 'with a custom key' do
+      let(:opts) { super().merge(rate_limit: { limit: 1, key: 'my-bucket' }) }
+
+      it 'buckets by that key instead of the host' do
+        other = described_class.new(opts.merge(url: 'http://other.example.com'))
+        allow(other).to receive(:enable_ssl)
+        allow(other).to receive(:set_headers)
+        allow(other).to receive(:set_timeout)
+        allow(other).to receive(:http).and_return(stubbed_http)
+
+        subject.call
+
+        expect { other.call }.to raise_error(SimpleHttpService::RateLimitExceeded)
+      end
     end
   end
 
